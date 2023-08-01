@@ -1,66 +1,90 @@
 package com.example.myfirstapp_youtube
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import com.example.myfirstapp_youtube.constance.Constance_salary
+import androidx.core.view.isVisible
+import com.example.myfirstapp_youtube.constance.Constance
 import com.example.myfirstapp_youtube.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var bindingClass : ActivityMainBinding
+    private var login: String = "empty"
+    private var password: String = "empty"
+    private var name: String = "empty"
+    private var name2: String = "empty"
+    private var name3: String = "empty"
+    private var avatarImageId: Int = 0
+    //Перменные где у нас будут хранится данные
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingClass = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bindingClass.root)
+    }
 
-        bindingClass.btResult.setOnClickListener {
-            Log.d("not log","ID img manager = ${R.drawable.manager}")
-            val resultValue = bindingClass.editValue.text.toString()
-            bindingClass.tvResult.visibility = View.VISIBLE
-            bindingClass.imageView.visibility = View.VISIBLE
-            when(resultValue){
 
-                Constance_salary.DIRECTOR -> {
-                    val tempText = "Вам начислено ${Constance_salary.DIRECTOR_SALARY}$"
-                    if(bindingClass.password.text.toString() == Constance_salary.DIRECTOR_PASSWORD){
-                        bindingClass.tvResult.text = tempText
-                        bindingClass.imageView.setImageResource(R.drawable.manager)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-                    } else {
-                        bindingClass.tvResult.text = "Неправильный пароль"
-                        bindingClass.imageView.setImageResource(R.drawable.stop)
-                    }
-                }
+        if(requestCode == Constance.REQUEST_CODE_SIGN_IN) {
+            val l = data?.getStringExtra(Constance.LOGIN)
+            val p = data?.getStringExtra(Constance.PASSWORD)
 
-                Constance_salary.ENGINEER -> {
-                    val tempText = "Вам начислено ${Constance_salary.ENGINEER_SALARY}$"
-
-                    if(bindingClass.password.text.toString() == Constance_salary.ENGINEER_PASSWORD){
-                        bindingClass.tvResult.text = tempText
-                        bindingClass.imageView.setImageResource(R.drawable.manager)
-                    } else {
-                        bindingClass.tvResult.text = "Неправильный пароль"
-                        bindingClass.imageView.setImageResource(R.drawable.stop)
-                    }
-                }
-
-                Constance_salary.APP_DEV -> {
-                    val tempText = "Вам начислено ${Constance_salary.APP_DEV_SALARY}$"
-                    if(bindingClass.password.text.toString() == Constance_salary.APP_DEV_PASSWORD){
-                        bindingClass.tvResult.text = tempText
-                        bindingClass.imageView.setImageResource(R.drawable.manager)
-                    } else {
-                        bindingClass.tvResult.text = "Неправильный пароль"
-                        bindingClass.imageView.setImageResource(R.drawable.stop)
-                    }
-                }
-                else -> {
-                    bindingClass.tvResult.text = "Указаный сотрудник у нас не числиться"
-                    bindingClass.imageView.setImageResource(R.drawable.stop)
-                }
+            if(login == l && password == p){
+                bindingClass.imAvatar.visibility = View.VISIBLE
+                bindingClass.imAvatar.setImageResource(avatarImageId)
+                val textInfo = "$name $name2 $name3"
+                bindingClass.tvInfo.text = textInfo
+                bindingClass.bHide.visibility = View.GONE
+                bindingClass.bExit.text = "Выйти"
+            } else {
+                bindingClass.imAvatar.visibility = View.VISIBLE
+                bindingClass.imAvatar.setImageResource(R.drawable.stop)
+                bindingClass.tvInfo.text = "Такого акаунда не сушествует!"
             }
+
+        } else if (requestCode == Constance.REQUEST_CODE_SIGN_UP){
+            login = data?.getStringExtra(Constance.LOGIN)!!
+            password = data.getStringExtra(Constance.PASSWORD)!!
+            name = data.getStringExtra(Constance.NAME)!!
+            name2 = data.getStringExtra(Constance.NAME2)!!
+            name3 = data.getStringExtra(Constance.NAME3)!!
+            avatarImageId = data.getIntExtra(Constance.AVATAR, 0)
+            bindingClass.imAvatar.visibility = View.VISIBLE
+            bindingClass.imAvatar.setImageResource(avatarImageId)
+            val textInfo = "$name $name2 $name3"
+            bindingClass.tvInfo.text = textInfo
+            bindingClass.bHide.visibility = View.GONE
+            bindingClass.bExit.text = "Выйти"
         }
     }
+    // Метод который прнимает результат из Activit, данные которые приходят от регистрации или от входа пользователя на сайт
+
+
+    fun onClickSignIn(view: View){
+
+        if(bindingClass.imAvatar.isVisible && bindingClass.tvInfo.text.toString() != "Такого акаунда не сушествует!") {
+            bindingClass.imAvatar.visibility = View.INVISIBLE
+            bindingClass.tvInfo.text = ""
+            bindingClass.bHide.visibility = View.VISIBLE
+            bindingClass.bExit.text = getString(R.string.sign_in)
+
+        } else {
+            // от сюда запускаем Активити и передаем ключевое слово которое указывает мы пришли для регестрации или для входа
+            val intent = Intent(this, SignInUptActivity::class.java)
+            intent.putExtra(Constance.SIGN_STATE, Constance.SIGN_IN_STATE)
+            startActivityForResult(intent, Constance.REQUEST_CODE_SIGN_IN)
+        }
+
+    }
+    //функции слушатель нажатий для кнопки SignIn
+
+    fun onClickSignUp(view: View){
+        val intent = Intent(this, SignInUptActivity::class.java)
+        intent.putExtra(Constance.SIGN_STATE, Constance.SIGN_UP_STATE)
+        startActivityForResult(intent, Constance.REQUEST_CODE_SIGN_UP)
+    }
+    //функции слушатель нажатий для кнопки SignUp
 }

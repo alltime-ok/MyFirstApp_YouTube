@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Мое первое приложение</string>
     <string name="hello">Hello</string>
+    <string name ="sign_in" translatable="false">Sign In</string>
+    <string name ="sign_up" translatable="false">Sign Up</string>
+    <string name ="avatar" translatable="false">Avatar</string>
+    <string name ="login" translatable="false">Login</string>
+    <string name ="password" translatable="false">Password</string>
+    <string name ="name1" translatable="false">Name</string>
+    <string name ="name2" translatable="false">Last Name</string>
+    <string name ="name3" translatable="false">Surname</string>
+    <string name ="done" translatable="false">Completed</string>
 
 
 </resources>

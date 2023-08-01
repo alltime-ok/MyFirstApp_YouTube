@@ -1,15 +1,20 @@
 package com.example.myfirstapp_youtube.constance
 
-object Constance_salary {
-    const val DIRECTOR_SALARY = 35000
-    const val ENGINEER_SALARY = 30000
-    const val APP_DEV_SALARY = 25000
+object Constance {
+    const val SIGN_IN_STATE = "sign_in"
+    const val SIGN_UP_STATE = "sign_up"
+    const val SIGN_STATE = "sign_state"
+    const val REQUEST_CODE_SIGN_IN = 1212
+    const val REQUEST_CODE_SIGN_UP = 2121
 
-    const val DIRECTOR = "Jon"
-    const val ENGINEER = "Ann"
-    const val APP_DEV = "Ihor"
+    const val LOGIN = "login"
+    const val PASSWORD = "password"
+    const val NAME = "name"
+    const val NAME2 = "name2"
+    const val NAME3 = "name3"
+    const val AVATAR = "avatar"
 
-    const val DIRECTOR_PASSWORD = "1234"
-    const val ENGINEER_PASSWORD = "4321"
-    const val APP_DEV_PASSWORD = "5678"
+
+
+
 }
